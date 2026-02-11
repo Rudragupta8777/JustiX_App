@@ -8,12 +8,14 @@
     android:padding="24dp"
     android:background="#121212">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="VR Setup Ready"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"/>
+        android:textStyle="bold"
+        android:textSize="26sp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,11 +42,13 @@
             android:gravity="center"/>
     </androidx.cardview.widget.CardView>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="I have finished the session"
+        android:textSize="16sp"
+        android:textColor="@color/text_white"
+        android:text="I have created the session"
         android:backgroundTint="#CF6679"/>
 
 </LinearLayout>

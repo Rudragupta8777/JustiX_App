@@ -1,10 +1,12 @@
 package com.justix.app
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -28,6 +30,14 @@ class CreateCaseActivity : AppCompatActivity() {
         binding = ActivityCreateCaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Light Status Bar for Cream Background
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+
+        // 1. Back Button Logic
+        binding.btnBack.setOnClickListener {
+            finish() // Go back to Dashboard
+        }
+
         binding.btnSelectPdf.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "application/pdf"
@@ -38,7 +48,7 @@ class CreateCaseActivity : AppCompatActivity() {
             if (selectedUri != null && binding.etTitle.text.toString().isNotEmpty()) {
                 uploadCase()
             } else {
-                Toast.makeText(this, "Please fill details", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please enter a title and select a PDF.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -47,12 +57,17 @@ class CreateCaseActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_PDF && resultCode == Activity.RESULT_OK) {
             selectedUri = data?.data
-            binding.txtFileName.text = "File Selected"
+            val fileName = File(selectedUri?.path ?: "").name
+            binding.txtFileName.text = "Attached: $fileName" // Show file name
+            // Use Sage Dark for success state
+            binding.txtFileName.setTextColor(getColor(R.color.accent_sage_dark))
         }
     }
 
     private fun uploadCase() {
-        binding.progressBar.visibility = View.VISIBLE
+        // Start Custom Animation
+        showLoadingAnimation()
+
         val file = getFileFromUri(selectedUri!!)
         val requestFile = file.asRequestBody("application/pdf".toMediaTypeOrNull())
         val pdfPart = MultipartBody.Part.createFormData("pdf", file.name, requestFile)
@@ -64,24 +79,54 @@ class CreateCaseActivity : AppCompatActivity() {
                 try {
                     val response = RetrofitClient.instance.uploadCase(token, pdfPart, titlePart)
                     withContext(Dispatchers.Main) {
-                        binding.progressBar.visibility = View.GONE
+
+                        // Stop Animation
+                        hideLoadingAnimation()
+
                         if (response.isSuccessful) {
-                            Toast.makeText(this@CreateCaseActivity, "Case Created!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@CreateCaseActivity, "Case Filed Successfully.", Toast.LENGTH_SHORT).show()
                             finish()
                         } else {
-                            Toast.makeText(this@CreateCaseActivity, "Error", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@CreateCaseActivity, "Filing Failed: ${response.code()}", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    withContext(Dispatchers.Main) {
+                        hideLoadingAnimation()
+                        e.printStackTrace()
+                        Toast.makeText(this@CreateCaseActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
     }
 
+    // --- CUSTOM ANIMATION LOGIC ---
+    private fun showLoadingAnimation() {
+        binding.layoutLoader.visibility = View.VISIBLE
+        binding.btnUpload.visibility = View.INVISIBLE // Hide button while loading
+
+        val dots = listOf(binding.dot1, binding.dot2, binding.dot3, binding.dot4)
+
+        dots.forEachIndexed { index, dot ->
+            val animator = ObjectAnimator.ofFloat(dot, "translationY", 0f, -15f)
+            animator.duration = 400
+            animator.repeatMode = ObjectAnimator.REVERSE
+            animator.repeatCount = ObjectAnimator.INFINITE
+            animator.interpolator = AccelerateDecelerateInterpolator()
+            animator.startDelay = (index * 120).toLong()
+            animator.start()
+        }
+    }
+
+    private fun hideLoadingAnimation() {
+        binding.layoutLoader.visibility = View.GONE
+        binding.btnUpload.visibility = View.VISIBLE
+    }
+
     private fun getFileFromUri(uri: Uri): File {
         val inputStream = contentResolver.openInputStream(uri)
-        val tempFile = File(cacheDir, "temp.pdf")
+        val tempFile = File(cacheDir, "temp_upload.pdf")
         val outputStream = FileOutputStream(tempFile)
         inputStream?.copyTo(outputStream)
         return tempFile

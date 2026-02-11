@@ -23,16 +23,26 @@ class MeetingsAdapter(private val onClick: (MeetingModel) -> Unit) :
 
     inner class MeetingViewHolder(private val binding: ItemMeetingBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(meeting: MeetingModel) {
-            binding.txtMeetingCode.text = "Session Code: ${meeting.meeting_code}"
+            // Set Reference Code
+            binding.txtMeetingCode.text = "REF: ${meeting.meeting_code}"
 
-            // Handle null score or status
-            binding.txtStatus.text = if (meeting.status == "completed") {
-                "Score: ${meeting.score ?: 0}/100"
+            // SAFE BINDING: Handle nulls if old data exists
+            // If meeting_number is null, default to #1 or "?"
+            val sessionNum = meeting.meeting_number ?: 1
+            binding.txtMeetingNumber.text = "Session $sessionNum"
+
+            // Handle Status/Score
+            if (meeting.status == "completed") {
+                binding.txtStatus.text = "${meeting.score ?: 0}"
+                binding.txtStatus.textSize = 24f
             } else {
-                "In Progress"
+                binding.txtStatus.text = "Active"
+                binding.txtStatus.textSize = 14f
             }
 
-            binding.root.setOnClickListener { onClick(meeting) }
+            binding.root.setOnClickListener {
+                onClick(meeting)
+            }
         }
     }
 

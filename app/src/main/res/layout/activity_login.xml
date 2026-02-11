@@ -1,33 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="32dp"
-    android:background="#FAFAFA">
+    android:background="@color/bg_paper_cream"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/loginCard"
+        app:layout_constraintVertical_bias="0.4">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_launcher_foreground"
+            app:tint="@color/text_ink_primary"
+            android:layout_marginBottom="16dp"
+            android:alpha="0.8"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="JustiX"
+            android:fontFamily="serif"
+            android:textStyle="bold"
+            android:textSize="56sp"
+            android:textColor="@color/text_ink_primary"
+            android:letterSpacing="-0.03"/>
+
+        <View
+            android:layout_width="60dp"
+            android:layout_height="4dp"
+            android:background="@color/accent_sage_green"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The Virtual Moot Court"
+            android:fontFamily="sans-serif-light"
+            android:textSize="18sp"
+            android:textColor="@color/text_ink_secondary"
+            android:letterSpacing="0.05"/>
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loginCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_login_card_book"
+        android:padding="32dp"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerContainer"
+        app:layout_constraintVertical_bias="0.3">
+
+        <TextView
+            android:id="@+id/txtLoginTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Counselor Access"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="14sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.1"
+            android:textColor="@color/accent_sage_dark"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtLoginSub"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Sign in to access your case files and transcripts."
+            android:fontFamily="serif"
+            android:textColor="@color/text_ink_primary"
+            android:textSize="20sp"
+            android:layout_marginTop="12dp"
+            android:lineSpacingMultiplier="1.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtLoginTitle"/>
+
+        <FrameLayout
+            android:id="@+id/btnGoogleSign"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/btn_google_book"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@+id/txtLoginSub"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_google"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Continue with Google"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/text_ink_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="JustiX"
-        android:textSize="40sp"
+        android:text="SECURED BY JUSTIX AI"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/accent_sage_dark"
+        android:textSize="11sp"
+        android:letterSpacing="0.15"
         android:textStyle="bold"
-        android:textColor="#1A237E"
-        android:layout_marginBottom="48dp"/>
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <Button
-        android:id="@+id/btnGoogleSign"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Login with Google"
-        android:backgroundTint="#4285F4"
-        android:textColor="#FFF"/>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
+    <LinearLayout
+        android:id="@+id/layoutLoader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:visibility="gone"/>
-</LinearLayout>
+        android:gravity="center"
+        android:visibility="gone"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <View android:id="@+id/dot1" android:layout_width="10dp" android:layout_height="10dp" android:background="@drawable/bg_dot_book" android:layout_marginEnd="10dp"/>
+        <View android:id="@+id/dot2" android:layout_width="10dp" android:layout_height="10dp" android:background="@drawable/bg_dot_book" android:layout_marginEnd="10dp"/>
+        <View android:id="@+id/dot3" android:layout_width="10dp" android:layout_height="10dp" android:background="@drawable/bg_dot_book" android:layout_marginEnd="10dp"/>
+        <View android:id="@+id/dot4" android:layout_width="10dp" android:layout_height="10dp" android:background="@drawable/bg_dot_book"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

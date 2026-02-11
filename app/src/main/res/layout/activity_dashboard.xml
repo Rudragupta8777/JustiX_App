@@ -4,52 +4,91 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/bg_paper_cream">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingHorizontal="24dp"
+        android:paddingTop="48dp"> <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="32dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="16dp">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="My Cases"
-                android:textSize="28sp"
-                android:textStyle="bold"
-                android:textColor="#1A237E"/>
-
-            <Button
-                android:id="@+id/btnLogout"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Logout"
-                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                android:layout_height="wrap_content"
+                android:text="ARCHIVES"
+                android:textSize="12sp"
+                android:letterSpacing="0.15"
+                android:textColor="@color/text_ink_secondary"
+                android:fontFamily="sans-serif-medium"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Cases"
+                android:textSize="42sp"
+                android:fontFamily="serif"
+                android:textStyle="bold"
+                android:textColor="@color/text_ink_primary"
+                android:letterSpacing="-0.02"/>
+
+            <View
+                android:layout_width="40dp"
+                android:layout_height="3dp"
+                android:background="@color/accent_sage_green"
+                android:layout_marginTop="4dp"/>
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerCases"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/btnLogout"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_lock_power_off"
+            app:tint="@color/text_ink_secondary"
+            android:background="@drawable/bg_paper_card"
+            android:padding="12dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Logout"/>
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerCases"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="100dp"/> </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabAddCase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
-        android:src="@drawable/ic_add"
-        app:tint="#FFF"
-        app:backgroundTint="#1A237E"
-        android:contentDescription="Add Case"/>
+        android:text="+ NEW BRIEF"
+        android:textColor="@color/text_ink_primary"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.05"
+        app:backgroundTint="@color/accent_sage_green"
+        app:iconTint="@color/text_ink_primary"
+        android:elevation="4dp"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

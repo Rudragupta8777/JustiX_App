@@ -1,5 +1,6 @@
 package com.justix.app.Adapter
 
+import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.justix.app.R // <--- IMPORT THIS TO FIX 'R' ERROR
+import com.justix.app.R
 import com.justix.app.data.TranscriptItem
 
 class TranscriptAdapter(private val list: List<TranscriptItem>) : RecyclerView.Adapter<TranscriptAdapter.VH>() {
@@ -28,12 +29,28 @@ class TranscriptAdapter(private val list: List<TranscriptItem>) : RecyclerView.A
         holder.text.text = item.text
         holder.speaker.text = item.speaker
 
-        if (item.speaker == "User") {
-            holder.layout.gravity = Gravity.END
-            holder.text.setBackgroundResource(R.drawable.bg_bubble_user)
-        } else {
-            holder.layout.gravity = Gravity.START
-            holder.text.setBackgroundResource(R.drawable.bg_bubble_ai)
+        when (item.speaker) {
+            "User" -> {
+                // USER (Right Side, Green)
+                holder.layout.gravity = Gravity.END
+                holder.text.setBackgroundResource(R.drawable.bg_bubble_user)
+                holder.speaker.gravity = Gravity.END
+                holder.speaker.setTextColor(Color.parseColor("#00E676")) // Neon Green
+            }
+            "Judge" -> {
+                // JUDGE (Left Side, Gold)
+                holder.layout.gravity = Gravity.START
+                holder.text.setBackgroundResource(R.drawable.bg_bubble_judge)
+                holder.speaker.gravity = Gravity.START
+                holder.speaker.setTextColor(Color.parseColor("#D4AF37")) // Gold
+            }
+            else -> {
+                // LAWYER / OTHER (Left Side, Purple)
+                holder.layout.gravity = Gravity.START
+                holder.text.setBackgroundResource(R.drawable.bg_bubble_lawyer)
+                holder.speaker.gravity = Gravity.START
+                holder.speaker.setTextColor(Color.parseColor("#A855F7")) // Purple
+            }
         }
     }
 
